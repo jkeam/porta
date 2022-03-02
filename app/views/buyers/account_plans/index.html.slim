@@ -1,0 +1,18 @@
+h1 Account plans
+p
+  | Account plans create "tiers" of usage within the developer portal,
+  | allowing you to distinguish between grades of support, content and
+  | other services partners at different levels receive.
+
+- if can_create_plan?(@new_plan)
+  = pf_button_in_title 'Create Account plan', new_polymorphic_path([:admin, @service, @new_plan])
+
+- if no_available_plans
+  <p class='notice'><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot signup.</p>
+
+section class="pf-c-page__main-section pf-m-no-padding"
+  div id='default_plan' data=default_account_plan_data
+    = javascript_pack_tag 'default_plan_selector'
+
+  div id='plans_table' data=account_plans_table_data
+    = javascript_pack_tag 'plans_table'

@@ -8,6 +8,11 @@ class Api::ServicePlansController < Api::PlansBaseController
   activate_menu :serviceadmin, :subscriptions, :service_plans
   sublayout 'api/service'
 
+  helper_method :default_service_plan_data, :service_plans_table_data
+  delegate :default_service_plan_data, :service_plans_table_data, to: :presenter
+
+  alias service_plans plans
+
   def index
     @new_plan = ServicePlan
   end
@@ -33,9 +38,11 @@ class Api::ServicePlansController < Api::PlansBaseController
     end
   end
 
+  # rubocop:disable Lint/UselessMethodDefinition
   def destroy
     super
   end
+  # rubocop:enable Lint/UselessMethodDefinition
 
   def masterize
     generic_masterize_plan(@service, :default_service_plan)
@@ -68,5 +75,9 @@ class Api::ServicePlansController < Api::PlansBaseController
 
   def update_service_plan_params
     params.require(:service_plan).permit(DEFAULT_PARAMS)
+  end
+
+  def presenter
+    @presenter ||= Api::ServicePlansPresenter.new(service: @service, collection: collection, params: params)
   end
 end

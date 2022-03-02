@@ -1,9 +1,9 @@
 // @flow
 
-import { ChangePlanSelectCardWrapper } from 'Plans'
+import { ChangePlanSelectCardWrapper } from 'Plans/components/ChangePlanSelectCard'
 import { safeFromJsonString } from 'utilities'
 
-import type { Plan } from 'Types'
+import type { Record } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'change_plan_select'
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const applicationPlans = safeFromJsonString<Plan[]>(dataset.applicationPlans) || []
+  const applicationPlans = safeFromJsonString<Record[]>(dataset.applicationPlans) || []
   const path: string = dataset.path
 
   ChangePlanSelectCardWrapper({

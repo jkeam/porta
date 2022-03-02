@@ -6,6 +6,11 @@ class Buyers::AccountPlansController < Api::PlansBaseController
 
   activate_menu! :audience, :accounts, :account_plans
 
+  helper_method :default_account_plan_data, :account_plans_table_data, :no_available_plans
+  delegate :default_account_plan_data, :account_plans_table_data, :no_available_plans, to: :presenter
+
+  alias account_plans plans
+
   def index
     @new_plan = AccountPlan
   end
@@ -31,11 +36,11 @@ class Buyers::AccountPlansController < Api::PlansBaseController
     end
   end
 
+  # rubocop:disable Lint/UselessMethodDefinition
   def destroy
-    super do
-      redirect_to admin_buyers_account_plans_path
-    end
+    super
   end
+  # rubocop:enable Lint/UselessMethodDefinition
 
   def masterize
     generic_masterize_plan(current_account, :default_account_plan)
@@ -57,5 +62,9 @@ class Buyers::AccountPlansController < Api::PlansBaseController
 
   def authorize_read_account_plans!
     authorize! :read, :account_plans
+  end
+
+  def presenter
+    @presenter ||= Buyers::AccountPlansPresenter.new(service: @service, collection: collection, params: params)
   end
 end

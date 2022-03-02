@@ -1,0 +1,16 @@
+h1 Service plans
+p
+  | Service plans allow you to define grades of
+  | service for each of the services (APIs) available through your
+  | developer portal. The plans allow you to define pricing per service
+  | and features available.
+
+- if can_create_plan?(@new_plan)
+  = pf_button_in_title 'Create Service plan', new_polymorphic_path([:admin, @service, @new_plan])
+
+section class="pf-c-page__main-section pf-m-no-padding"
+  div id='default_plan' data=default_service_plan_data
+    = javascript_pack_tag 'default_plan_selector'
+
+  div id='plans_table' data=service_plans_table_data
+    = javascript_pack_tag 'plans_table'

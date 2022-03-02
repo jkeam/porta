@@ -3,8 +3,6 @@
 PLANS = /account|service|application/.freeze
 
 Given "the {provider} has following {plan_type} plan(s):" do |provider, plan_type, table|
-  plan = "#{plan_type}_plan"
-
   transform_application_plans_table(table).hashes.each do |row|
     FactoryBot.create plan, row.reverse_merge!(:issuer => provider.first_service!)
   end

@@ -9,10 +9,11 @@ class Api::PlansBaseController < Api::BaseController
   before_action :authorize_action, only: %i[new create destroy]
   before_action :find_plan, except: %i[index new create]
   before_action :find_service
-  before_action :find_plans, only: :index
   before_action :check_plan_can_be_deleted, only: :destroy
 
   activate_menu :serviceadmin
+
+  delegate :plans, to: :presenter
 
   class UndefinedCollectionMethod < StandardError; end
 
@@ -39,14 +40,6 @@ class Api::PlansBaseController < Api::BaseController
 
   def find_plan
     @plan = resource
-  end
-
-  def find_plans
-    search = ThreeScale::Search.new(params[:search] || params)
-    @plans = collection.not_custom
-                       .order_by(params[:sort].presence || :name, params[:direction].presence || :asc)
-                       .scope_search(search)
-    @page_plans = @plans.paginate(pagination_params)
   end
 
   def find_issuer
@@ -104,14 +97,6 @@ class Api::PlansBaseController < Api::BaseController
     @plan.destroy
 
     return yield if block_given?
-
-    unless @plan.type == 'ApplicationPlan'
-      # Only Application plans are implemented in React right now
-      ThreeScale::Deprecation.warn "Plans are being migrated to React and this will no longer be used"
-
-      flash[:notice] = 'The plan was deleted'
-      return redirect_to plans_index_path
-    end
 
     json = { notice: 'The plan was deleted', id: @plan.id }
     respond_to do |format|

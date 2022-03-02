@@ -2,6 +2,9 @@
 - content_for :sublayout_title, 'Usage Rules', flush: true
 
 - if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible?
+  / - if @plans.size > 0
+  /   div id='default_plan' data=default_service_plan_data(@service, @plans)
+  /     = javascript_pack_tag 'default_plan_selector'
   = form_tag polymorphic_path([:masterize, :admin, @service, ServicePlan]), :method => :post, :class => 'service autosubmit formtastic', :remote => true do
     fieldset.inputs
       legend Default Service Plan
