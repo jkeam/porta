@@ -16,8 +16,6 @@ features: &default
     wait_time: 0
   logging:
     audits_to_stdout: true
-  quickstarts:
-    enabled: false
   email_configuration:
     enabled: false
 

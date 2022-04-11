@@ -9,24 +9,8 @@ class Provider::Admin::QuickstartsControllerTest < ActionController::TestCase
     login_provider(provider)
   end
 
-  class FeatureOnTest < self
-    setup do
-      Features::QuickstartsConfig.stubs(enabled?: true)
-    end
-
-    test '#show' do
-      get :show
-      assert_response :ok
-    end
-  end
-
-  class FeatureOffTest < self
-    setup do
-      Features::QuickstartsConfig.stubs(enabled?: false)
-    end
-
-    test 'raises not found' do
-      assert_raise(ActionController::RoutingError) { get :show }
-    end
+  test '#show' do
+    get :show
+    assert_response :ok
   end
 end
