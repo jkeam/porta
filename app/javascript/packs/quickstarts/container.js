@@ -17,4 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     links: safeFromJsonString<Array<[string, string, string]>>(links) || [],
     renderCatalog: safeFromJsonString<boolean>(renderCatalog)
   }, containerId)
+
+  // HACK of the year: We need QuickStartContainer to wrap the whole #wrapper for the Drawer to work properly.
+  const wrapperContainer = document.getElementById('wrapper')
+  const quickStartsContainer = document.querySelector('.pfext-quick-start-drawer__body')
+
+  if (wrapperContainer && quickStartsContainer) {
+    quickStartsContainer.after(wrapperContainer)
+  }
 })
