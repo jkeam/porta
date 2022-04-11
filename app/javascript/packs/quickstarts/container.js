@@ -1,9 +1,14 @@
 // @flow
 
 import { QuickStartContainerWrapper as QuickStartContainer } from 'QuickStarts/components/QuickStartContainer'
+import { getActiveQuickstart } from 'QuickStarts/utils/progressTracker'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (getActiveQuickstart == null) {
+    return // No need to render Quickstarts
+  }
+
   const containerId = 'quick-start-container'
   const container = document.getElementById(containerId)
 
