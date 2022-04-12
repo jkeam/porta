@@ -172,6 +172,13 @@ class FrontendController < ApplicationController
   end
 
   def quickstarts_presenter
-    @quickstarts_presenter ||= QuickstartsPresenter.new(@backend_api || @service || current_account.default_service)
+    current_api = if @backend_api&.id.present?
+                    @backend_api
+                  elsif @service&.id.present?
+                    @service
+                  else
+                    current_account.default_service
+                  end
+    @quickstarts_presenter ||= QuickstartsPresenter.new(current_api)
   end
 end
